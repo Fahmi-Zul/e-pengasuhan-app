@@ -15,40 +15,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="id">
       <body className="bg-slate-50 flex min-h-screen overflow-x-hidden">
         
-        {/* Tombol Burger Khusus Mobile (Disembunyikan di Halaman Login) */}
+        {/* Tombol Burger Khusus Mobile */}
         {!isLoginPage && (
           <div className="md:hidden fixed top-3 left-3 z-50">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 bg-blue-900 text-white rounded-lg shadow-md focus:outline-none"
+              className="p-2 bg-[#0c2a57] text-white rounded-xl shadow-md focus:outline-none border border-slate-700"
               aria-label="Toggle Menu"
             >
-              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         )}
 
-        {/* Sidebar Utama (Responsif: Slide-over di HP, Permanen di Desktop) */}
+        {/* Sidebar dengan pengontrol props mobile */}
         {!isLoginPage && (
-          <>
-            <div
-              className={`
-                fixed md:static inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out
-                ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-              `}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <Sidebar />
-            </div>
+          <Sidebar isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />
+        )}
 
-            {/* Overlay Gelap Transparan Saat Menu Mobile Terbuka */}
-            {isMobileMenuOpen && (
-              <div
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm transition-opacity"
-              />
-            )}
-          </>
+        {/* Overlay Gelap Transparan Saat Menu Mobile Terbuka */}
+        {isMobileMenuOpen && !isLoginPage && (
+          <div
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm transition-opacity"
+          />
         )}
 
         {/* Area Konten Utama */}

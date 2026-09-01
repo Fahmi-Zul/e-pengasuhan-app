@@ -4,7 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
-export default function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
+}
+
+export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [settings, setSettings] = useState<any>(null);
@@ -63,11 +68,19 @@ export default function Sidebar() {
     }
   };
 
+  const handleLinkClick = () => {
+    if (setIsOpen) setIsOpen(false);
+  };
+
   return (
-    <aside className="w-64 bg-[#0c2a57] text-slate-200 min-h-screen p-4 flex flex-col justify-between shadow-lg sticky top-0 h-screen shrink-0 overflow-y-auto">
+    <aside className={`
+      w-64 bg-[#0c2a57] text-slate-200 min-h-screen p-4 flex flex-col justify-between shadow-lg 
+      fixed md:sticky top-0 h-screen shrink-0 overflow-y-auto z-40 transition-transform duration-300 ease-in-out
+      ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+    `}>
       <div>
         {/* Brand Header */}
-        <div className="flex items-center gap-3 px-3 py-4 mb-4 border-b border-slate-700/50">
+        <div className="flex items-center gap-3 px-3.5 py-4 mb-4 border-b border-slate-700/50 mt-10 md:mt-0">
           {settings?.logo_url ? (
             <img src={settings.logo_url} alt="Logo" className="w-9 h-9 object-contain bg-white rounded-xl p-1 shadow-md" />
           ) : (
@@ -85,6 +98,7 @@ export default function Sidebar() {
         <nav className="flex flex-col gap-1 text-xs font-semibold">
           <Link
             href="/"
+            onClick={handleLinkClick}
             className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
               pathname === '/' ? 'bg-[#2c6ddf] text-white font-bold shadow-md' : 'hover:bg-slate-800/60 text-slate-300'
             }`}
@@ -107,12 +121,12 @@ export default function Sidebar() {
               </button>
               {openMaster && (
                 <div className="ml-4 pl-3 my-1 border-l border-slate-700/60 flex flex-col gap-1 py-1">
-                  <Link href="/santri" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/santri' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Santri</Link>
-                  <Link href="/guru" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/guru' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Guru</Link>
-                  <Link href="/musyrif" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/musyrif' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Musyrif</Link>
-                  <Link href="/kelas" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/kelas' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Kelas</Link>
-                  <Link href="/kamar" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/kamar' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Kamar / Asrama</Link>
-                  <Link href="/alquran" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/alquran' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Al-Qur'an (Halaqoh)</Link>
+                  <Link href="/santri" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/santri' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Santri</Link>
+                  <Link href="/guru" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/guru' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Guru</Link>
+                  <Link href="/musyrif" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/musyrif' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Musyrif</Link>
+                  <Link href="/kelas" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/kelas' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Kelas</Link>
+                  <Link href="/kamar" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/kamar' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Kamar / Asrama</Link>
+                  <Link href="/alquran" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/alquran' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Data Al-Qur'an (Halaqoh)</Link>
                 </div>
               )}
             </div>
@@ -132,9 +146,9 @@ export default function Sidebar() {
               </button>
               {openPelanggaran && (
                 <div className="ml-4 pl-3 my-1 border-l border-slate-700/60 flex flex-col gap-1 py-1">
-                  <Link href="/pelanggaran?ranah=sekolah" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname.includes('ranah=sekolah') ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}>  Sekolah</Link>
-                  <Link href="/pelanggaran?ranah=asrama" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname.includes('ranah=asrama') ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}>  Asrama</Link>
-                  <Link href="/pelanggaran?ranah=quran" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname.includes('ranah=quran') ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}>  Al-Qur'an</Link>
+                  <Link href="/pelanggaran?ranah=sekolah" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname.includes('ranah=sekolah') ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}>  Sekolah</Link>
+                  <Link href="/pelanggaran?ranah=asrama" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname.includes('ranah=asrama') ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}>  Asrama</Link>
+                  <Link href="/pelanggaran?ranah=quran" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname.includes('ranah=quran') ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}>  Al-Qur'an</Link>
                 </div>
               )}
             </div>
@@ -154,8 +168,8 @@ export default function Sidebar() {
               </button>
               {openPenilaian && (
                 <div className="ml-4 pl-3 my-1 border-l border-slate-700/60 flex flex-col gap-1 py-1">
-                  <Link href="/penilaian-asrama/kamar" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/penilaian-asrama/kamar' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Kedisiplinan Kamar</Link>
-                  <Link href="/penilaian-asrama/santri" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/penilaian-asrama/santri' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Kedisiplinan Santri</Link>
+                  <Link href="/penilaian-asrama/kamar" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/penilaian-asrama/kamar' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Kedisiplinan Kamar</Link>
+                  <Link href="/penilaian-asrama/santri" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/penilaian-asrama/santri' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Kedisiplinan Santri</Link>
                 </div>
               )}
             </div>
@@ -164,6 +178,7 @@ export default function Sidebar() {
           {isAdmin && (
             <Link
               href="/deep-talk"
+              onClick={handleLinkClick}
               className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
                 pathname === '/deep-talk' ? 'bg-[#2c6ddf] text-white font-bold shadow-md' : 'hover:bg-slate-800/60 text-slate-300'
               }`}
@@ -187,9 +202,9 @@ export default function Sidebar() {
               </button>
               {openRapor && (
                 <div className="ml-4 pl-3 my-1 border-l border-slate-700/60 flex flex-col gap-1 py-1">
-                  <Link href="/rapor-pengasuhan/kelas-10" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/rapor-pengasuhan/kelas-10' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Rapor Kelas 10</Link>
-                  <Link href="/rapor-pengasuhan/kelas-11" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/rapor-pengasuhan/kelas-11' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Rapor Kelas 11</Link>
-                  <Link href="/rapor-pengasuhan/kelas-12" className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/rapor-pengasuhan/kelas-12' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Rapor Kelas 12</Link>
+                  <Link href="/rapor-pengasuhan/kelas-10" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/rapor-pengasuhan/kelas-10' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Rapor Kelas 10</Link>
+                  <Link href="/rapor-pengasuhan/kelas-11" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/rapor-pengasuhan/kelas-11' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Rapor Kelas 11</Link>
+                  <Link href="/rapor-pengasuhan/kelas-12" onClick={handleLinkClick} className={`px-3 py-2 rounded-lg text-[11px] transition ${pathname === '/rapor-pengasuhan/kelas-12' ? 'bg-[#2c6ddf] text-white font-bold' : 'text-slate-400 hover:text-white'}`}> Rapor Kelas 12</Link>
                 </div>
               )}
             </div>
@@ -198,6 +213,7 @@ export default function Sidebar() {
           {isAdmin && (
             <Link
               href="/settings"
+              onClick={handleLinkClick}
               className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition ${
                 pathname === '/settings' ? 'bg-[#2c6ddf] text-white font-bold shadow-md' : 'hover:bg-slate-800/60 text-slate-300'
               }`}
